@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<title>Portafolio Ferias</title>
+<style>
+:root{--bg:#f3f4f6;--card:#fff;--ink:#111;--mut:#6b7280;--line:#d9dce1;--acc:#0b6bcb;--ok:#15803d;--bad:#b91c1c;--warn:#b45309}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+button{font:inherit;cursor:pointer}
+[hidden]{display:none!important}
+header{background:#111;color:#fff;padding:10px 12px;padding-top:max(10px,env(safe-area-inset-top))}
+header .row{display:flex;gap:8px;align-items:center}
+header h1{font-size:17px;margin:0;flex:1}
+header .ib{background:#2a2a2a;color:#fff;border:0;border-radius:8px;width:42px;height:42px;font-size:20px}
+.fer{margin-top:8px}
+.fer input{width:100%;border:0;border-radius:8px;padding:10px;font-size:16px;background:#2a2a2a;color:#fff}
+.fer input::placeholder{color:#9ca3af}
+.tabs{display:flex;background:#111;position:sticky;top:0;z-index:10}
+.tabs button{flex:1;padding:12px;border:0;background:#111;color:#9ca3af;border-bottom:3px solid transparent;font-weight:600}
+.tabs button.on{color:#fff;border-color:var(--acc)}
+.tools{display:flex;gap:6px;padding:10px 12px 0}
+.tools input,.tools select{border:1px solid var(--line);border-radius:8px;padding:10px;font-size:16px;background:#fff;min-width:0}
+.tools input{flex:1}
+.tools select{flex:1}
+#count{padding:6px 14px;color:var(--mut);font-size:13px}
+#list,#bandeja{padding:0 12px 100px;display:grid;gap:10px}
+.item{display:flex;gap:10px;background:var(--card);border-radius:12px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,.08);cursor:pointer}
+.thumb{width:76px;height:76px;border-radius:8px;background:#e5e7eb center/cover no-repeat;flex:none;display:grid;place-items:center;color:#9ca3af;font-size:28px}
+.item .t{font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .s{color:var(--mut);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .b{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px}
+.tag{font-size:12px;background:#eef2f7;border-radius:99px;padding:2px 8px}
+.tag.ok{background:#dcfce7;color:var(--ok)}
+.tag.warn{background:#fef3c7;color:var(--warn)}
+.star{color:#d97706;letter-spacing:1px}
+.empty{text-align:center;color:var(--mut);padding:40px 20px}
+#bottom{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;gap:8px;padding:10px 12px max(10px,env(safe-area-inset-bottom));background:linear-gradient(rgba(243,244,246,0),#f3f4f6 35%)}
+#bottom button{flex:1;padding:15px 8px;border:0;border-radius:12px;font-weight:700;font-size:16px;box-shadow:0 3px 10px rgba(0,0,0,.25)}
+#bQuick{background:#111;color:#fff}
+#bNew{background:var(--acc);color:#fff}
+.cap{background:var(--card);border-radius:12px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.cap .top{display:flex;gap:10px}
+.cap img{width:96px;height:96px;object-fit:cover;border-radius:8px;flex:none}
+.cap textarea{flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;min-height:96px;resize:vertical}
+.cap .meta{font-size:12px;color:var(--mut);margin:6px 0}
+.cap .btns{margin-top:4px}
+/* form */
+#formView{padding-bottom:90px}
+.bar{position:sticky;top:0;z-index:10;background:#111;color:#fff;display:flex;gap:8px;align-items:center;padding:8px 12px;padding-top:max(8px,env(safe-area-inset-top))}
+.bar b{flex:1;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar button{background:#2a2a2a;color:#fff;border:0;border-radius:8px;padding:10px 12px}
+#saved{font-size:12px;color:#86efac}
+section.sec{background:var(--card);margin:10px 12px;border-radius:12px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.08)}
+section.sec h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin:0 0 8px}
+label.f{display:block;font-size:12px;color:var(--mut);margin-bottom:8px}
+label.f input,label.f select,label.f textarea{display:block;width:100%;margin-top:2px;border:1px solid var(--line);border-radius:8px;padding:11px;font-size:16px;color:var(--ink);background:#fff;font-family:inherit}
+label.f textarea{min-height:70px;resize:vertical}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
+.g2 .full{grid-column:1/-1}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
+.chip input{display:none}
+.chip span{display:inline-block;border:1.5px solid var(--line);border-radius:99px;padding:10px 14px;background:#fff}
+.chip input:checked+span{background:var(--ok);border-color:var(--ok);color:#fff}
+.chip input:checked+span::before{content:"✓ "}
+.photos{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.ph1{position:relative;width:88px;height:88px;border-radius:8px;background:#e5e7eb center/cover}
+.ph1 button{position:absolute;top:2px;right:2px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(0,0,0,.65);color:#fff}
+.ph1 em{position:absolute;left:0;right:0;bottom:0;background:rgba(21,128,61,.88);color:#fff;font-size:11px;text-align:center;font-style:normal;border-radius:0 0 8px 8px}
+.hint{color:var(--mut);font-size:13px}
+.btns{display:flex;gap:8px}
+.btn{flex:1;border:1.5px solid var(--acc);background:#fff;color:var(--acc);border-radius:10px;padding:12px 8px;font-weight:600}
+.btn.pri{background:var(--acc);color:#fff}
+.btn.dark{background:#111;border-color:#111;color:#fff}
+.btn.bad{border-color:var(--bad);color:var(--bad)}
+.stars{margin-bottom:6px}
+.stars button{background:none;border:0;font-size:32px;color:#d1d5db;padding:0 4px}
+.stars button.on{color:#d97706}
+details.reg{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:#fafafa}
+details.reg>summary{display:flex;gap:10px;align-items:center;padding:8px;cursor:pointer;list-style:none}
+details.reg>summary::-webkit-details-marker{display:none}
+.rth{width:52px;height:52px;border-radius:8px;background:#e5e7eb center/cover;flex:none;display:grid;place-items:center;color:#9ca3af}
+.rt{flex:1;min-width:0}
+.rt b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rt small{color:var(--warn)}
+.rt small.ok{color:var(--ok)}
+.rbody{padding:0 10px 10px}
+details.mas{border-top:1px dashed var(--line);margin-top:6px;padding-top:6px}
+details.mas>summary{cursor:pointer;color:var(--acc);font-weight:600;padding:6px 0}
+details.masp>summary{cursor:pointer;font-weight:600;color:var(--acc)}
+.rfoot{display:flex;gap:8px;align-items:center;margin-top:6px}
+.rfoot .x{border:0;background:#fee2e2;color:var(--bad);border-radius:8px;padding:10px 12px}
+#menu{position:fixed;right:10px;top:56px;z-index:30;background:#fff;color:#111;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.3);min-width:250px;overflow:hidden}
+#menu button{display:block;width:100%;text-align:left;border:0;background:#fff;padding:14px 16px;border-bottom:1px solid #eee}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:99px;z-index:60;font-size:14px;max-width:90%}
+#modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.55);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.mbox{background:#fff;width:100%;max-width:560px;border-radius:16px 16px 0 0;padding:14px;padding-bottom:max(14px,env(safe-area-inset-bottom));max-height:92vh;overflow:auto}
+.mbox h3{margin:0 0 8px}
+.mbox img.pv{width:100%;max-height:38vh;object-fit:contain;border-radius:8px;background:#eee;margin-bottom:8px}
+/* impresión */
+#print{display:none}
+.ficha{font-family:Arial,sans-serif;color:#000}
+.ficha .fh{display:flex;gap:14px;margin-bottom:10px}
+.ficha .fbox{width:62mm;height:48mm;border:1px solid #444;flex:none;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ficha .fbox img{max-width:100%;max-height:100%}
+.ficha .ff{flex:1;font-size:11pt}
+.ficha .ff div{border-bottom:1px solid #666;margin-bottom:3px;padding-bottom:1px;display:flex;gap:6px}
+.ficha .ff span{color:#333;white-space:nowrap}
+.ficha .ff i{font-style:normal;font-weight:bold}
+.ficha .ff .chk{border:0;margin-top:8px;gap:18px}
+.ficha .fm{font-size:9pt;text-align:right;width:36mm;color:#333}
+.ficha table{width:100%;border-collapse:collapse;font-size:10pt}
+.ficha th,.ficha td{border:1px solid #888;padding:3px 5px;vertical-align:top}
+.ficha th{font-weight:normal;text-align:center}
+.ficha td{height:8.2mm}
+.ficha .obs{border:1px solid #888;margin-top:8px;padding:4px 6px;min-height:22mm;font-size:10pt}
+@media print{
+ @page{size:A4 landscape;margin:10mm}
+ body>*:not(#print){display:none!important}
+ #print{display:block}
+ body{background:#fff}
+ .ficha{page-break-after:always}
+ .ficha:last-child{page-break-after:auto}
+}
+</style>
+</head>
+<body>
+<noscript><p style="padding:24px;font:18px system-ui">⚠ Esta herramienta necesita JavaScript. En iPhone, no la abras desde la vista previa de WhatsApp/Correo/Archivos: ábrela en Safari mediante un enlace.</p></noscript>
+
+<!-- LISTA -->
+<div id="listView">
+ <header>
+  <div class="row"><h1>📒 Portafolio Ferias</h1><button class="ib" id="btnMenu" aria-label="Menú">⋮</button></div>
+  <div class="fer"><input id="feriaActual" placeholder="Feria actual (ej: Heimtextil Ene-2027)" list="dlFerias"></div>
+ </header>
+ <div class="tabs"><button id="tabP" class="on">Proveedores</button><button id="tabB">Bandeja</button></div>
+ <div id="tools">
+  <div class="tools"><input id="q" type="search" placeholder="Buscar proveedor, país, colección…"></div>
+  <div class="tools"><select id="ffer"></select><select id="fest"></select></div>
+ </div>
+ <div id="count"></div>
+ <div id="list"></div>
+ <div id="bandeja" hidden></div>
+ <div id="bottom">
+  <button id="bQuick">📷 Foto rápida</button>
+  <button id="bNew">+ Proveedor</button>
+ </div>
+</div>
+
+<!-- FORMULARIO PROVEEDOR -->
+<div id="formView" hidden>
+ <div class="bar">
+  <button id="btnBack">← Lista</button>
+  <b id="ftitle">Nuevo proveedor</b>
+  <span id="saved"></span>
+ </div>
+ <div id="form">
+  <section class="sec">
+   <h2>Foto del stand / tarjeta</h2>
+   <div class="photos" id="fotos"></div>
+   <div class="btns">
+    <button class="btn pri" data-act="cam">📷 Tomar foto</button>
+    <button class="btn" data-act="gal">🖼 Galería</button>
+   </div>
+  </section>
+
+  <section class="sec">
+   <h2>Proveedor</h2>
+   <label class="f">Proveedor<input data-k="proveedor" autocomplete="off"></label>
+   <label class="f">País<input data-k="pais" list="dlPais" autocomplete="off"></label>
+   <div class="chips">
+    <label class="chip"><input type="radio" name="rubro" data-k="rubro" value="alfombra"><span>Alfombras</span></label>
+    <label class="chip"><input type="radio" name="rubro" data-k="rubro" value="textil"><span>Textil hogar</span></label>
+    <label class="chip"><input type="radio" name="rubro" data-k="rubro" value="otro"><span>Otro</span></label>
+   </div>
+   <div class="stars" id="stars"></div>
+  </section>
+
+  <section class="sec">
+   <h2>Colecciones / productos</h2>
+   <div id="regs"></div>
+   <div class="btns">
+    <button class="btn dark" data-act="quickreg">⚡ Foto rápida</button>
+    <button class="btn" data-act="addreg">+ Registro</button>
+   </div>
+  </section>
+
+  <section class="sec">
+   <h2>Notas del proveedor</h2>
+   <label class="f"><textarea data-k="obs" placeholder="Impresiones, acuerdos, pendientes…"></textarea></label>
+  </section>
+
+  <section class="sec">
+   <details class="masp"><summary>Más datos del proveedor (opcional)</summary>
+    <div style="margin-top:10px">
+     <label class="f">Estado<select data-k="estado" id="selEstado"></select></label>
+     <div class="g2">
+      <label class="f">Puerto<input data-k="puerto" list="dlPuerto" autocomplete="off"></label>
+      <label class="f">Stand / Pabellón<input data-k="stand"></label>
+     </div>
+     <div class="g2">
+      <label class="f">Plazo de pago<input data-k="plazo" placeholder="30% anticipo / 70% BL"></label>
+      <label class="f">Tiempo de producción<input data-k="produccion" placeholder="35 días"></label>
+     </div>
+     <div class="chips">
+      <label class="chip"><input type="checkbox" data-k="catalogo"><span>Catálogo</span></label>
+      <label class="chip"><input type="checkbox" data-k="muestra"><span>Muestra</span></label>
+      <label class="chip"><input type="checkbox" data-k="enviara"><span>Enviará muestra</span></label>
+     </div>
+     <div class="g2">
+      <label class="f">Contacto<input data-k="contacto"></label>
+      <label class="f">Cargo<input data-k="cargo"></label>
+      <label class="f">Email<input data-k="email" type="email" inputmode="email"></label>
+      <label class="f">Teléfono<input data-k="tel" type="tel"></label>
+      <label class="f">WeChat / WhatsApp<input data-k="wechat"></label>
+      <label class="f">Web<input data-k="web" inputmode="url"></label>
+      <label class="f">MOQ<input data-k="moq" placeholder="500 m²"></label>
+      <label class="f">Incoterm<select data-k="incoterm" id="selInco"></select></label>
+      <label class="f">Moneda precios<select data-k="moneda" id="selMon"></select></label>
+      <label class="f">Fecha<input data-k="fecha" type="date"></label>
+      <label class="f full">Feria<input data-k="feria" list="dlFerias"></label>
+     </div>
+    </div>
+   </details>
+  </section>
+
+  <section class="sec">
+   <div class="btns">
+    <button class="btn" data-act="printOne">🖨 Imprimir ficha</button>
+    <button class="btn bad" data-act="delete">Eliminar</button>
+   </div>
+  </section>
+ </div>
+</div>
+
+<div id="menu" hidden>
+ <button data-m="csv">📊 Exportar a Excel (CSV) — lo listado + bandeja</button>
+ <button data-m="zip">🗂 Exportar fotos ordenadas (ZIP)</button>
+ <button data-m="json">💾 Respaldo completo (JSON)</button>
+ <button data-m="import">📥 Importar respaldo</button>
+ <button data-m="print">🖨 Imprimir fichas — lo listado</button>
+</div>
+
+<div id="modal" hidden><div class="mbox" id="mbox"></div></div>
+
+<datalist id="dlFerias"></datalist>
+<datalist id="dlPais"><option>China</option><option>Hong Kong</option><option>Taiwán</option><option>India</option><option>Pakistán</option><option>Turquía</option><option>Vietnam</option><option>Tailandia</option><option>Indonesia</option><option>Corea del Sur</option><option>Egipto</option><option>Italia</option><option>España</option><option>Portugal</option><option>Alemania</option><option>Brasil</option></datalist>
+<datalist id="dlPuerto"><option>Shanghai</option><option>Ningbo</option><option>Shenzhen / Yantian</option><option>Guangzhou / Nansha</option><option>Qingdao</option><option>Tianjin / Xingang</option><option>Xiamen</option><option>Mersin</option><option>Izmir</option><option>Nhava Sheva</option><option>Mundra</option><option>Ho Chi Minh</option><option>Karachi</option></datalist>
+
+<input type="file" id="fcam" accept="image/*" capture="environment" hidden>
+<input type="file" id="fgal" accept="image/*" multiple hidden>
+<input type="file" id="fimp" accept=".json,application/json" hidden>
+<div id="toast" hidden></div>
+<div id="print"></div>
+
+<script>
+'use strict';
+const STATES=['Nuevo','Por contactar','Cotizando','Muestra solicitada','Negociando','Descartado'];
+const INCO=['','EXW','FOB','CIF','CFR','DDP'];
+const MON=['USD','CNY','EUR','CLP'];
+/* Campos de "más detalles" según rubro. Para agregar/quitar campos edita solo esta tabla. */
+const LBL={material:'Material / composición',nudos:'Nudos / densidad',textura:'Textura / pelo',hilos:'Hilos / gramaje',colores:'Colores',medidas:'Medidas',esp:'Otras especificaciones'};
+const FIELDS={
+  alfombra:['material','nudos','textura','colores','medidas','esp'],
+  textil:['material','hilos','colores','medidas','esp'],
+  otro:['material','colores','medidas','esp']
+};
+const RUBRO={alfombra:'Alfombras',textil:'Textil hogar',otro:'Otro'};
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const p2=n=>String(n).padStart(2,'0');
+const hoy=()=>{const d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
+const fmtFecha=iso=>{if(!iso)return '';const p=iso.split('-');return p.length===3?p[2]+'-'+p[1]+'-'+p[0]:iso};
+const fmtTs=ts=>{const d=new Date(ts);return p2(d.getDate())+'-'+p2(d.getMonth()+1)+'-'+d.getFullYear()+' '+p2(d.getHours())+':'+p2(d.getMinutes())};
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k)||'';localStorage.setItem(k,v)}catch(e){return ''}};
+const newReg=()=>({id:uid(),nombre:'',nota:'',precio:'',fotos:[],muestras:[],d:{},listo:false});
+const newRec=()=>({id:uid(),feria:ls('feria'),fecha:hoy(),proveedor:'',pais:'',rubro:ls('rubro')||'alfombra',puerto:'',plazo:'',produccion:'',catalogo:false,muestra:false,enviara:false,contacto:'',cargo:'',email:'',tel:'',wechat:'',web:'',stand:'',incoterm:'',moneda:'USD',moq:'',interes:0,estado:'Nuevo',obs:'',fotos:[],regs:[],mod:Date.now()});
+const regVacio=r=>!(r.nombre||r.nota||r.precio||r.fotos.length||r.muestras.length||Object.values(r.d).some(Boolean));
+const isEmpty=p=>!(p.proveedor||p.pais||p.contacto||p.obs||p.fotos.length||p.regs.length);
+
+/* Normaliza registros viejos (v1: productos[] -> regs[]) */
+function normalize(p){
+  p.fotos=p.fotos||[];p.rubro=p.rubro||'otro';p.estado=p.estado||'Nuevo';p.interes=p.interes||0;
+  if(!p.regs){
+    p.regs=(p.productos||[]).filter(x=>x.desc||x.precio||x.medidas||x.comp||x.esp||x.foto).map(x=>({id:uid(),nombre:x.desc||'',nota:'',precio:x.precio||'',fotos:x.foto?[x.foto]:[],muestras:[],d:{medidas:x.medidas||'',material:x.comp||'',esp:x.esp||''},listo:true}));
+  }
+  delete p.productos;
+  p.regs.forEach(r=>{r.fotos=r.fotos||[];r.muestras=r.muestras||[];r.d=r.d||{};if(!r.id)r.id=uid()});
+  return p;
+}
+
+/* ---------- IndexedDB ---------- */
+let db,items=[],caps=[],cur=null,saveT=null,tab='p';
+const OPEN=new Set();
+const openDB=()=>new Promise((res,rej)=>{const r=indexedDB.open('feria_prov',1);r.onupgradeneeded=()=>r.result.createObjectStore('prov',{keyPath:'id'});r.onsuccess=()=>{db=r.result;res()};r.onerror=()=>rej(r.error)});
+const st=m=>db.transaction('prov',m).objectStore('prov');
+const dbAll=()=>new Promise((res,rej)=>{const q=st('readonly').getAll();q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});
+const dbPut=o=>new Promise((res,rej)=>{const q=st('readwrite').put(o);q.onsuccess=()=>res();q.onerror=()=>rej(q.error)});
+const dbDel=id=>new Promise((res,rej)=>{const q=st('readwrite').delete(id);q.onsuccess=()=>res();q.onerror=()=>rej(q.error)});
+function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>e.hidden=true,2400)}
+function showModal(h){$('#mbox').innerHTML=h;$('#modal').hidden=false}
+function hideModal(){$('#modal').hidden=true;$('#mbox').innerHTML=''}
+
+/* ---------- Fotos ---------- */
+function compress(file,max,q){
+  return new Promise((res,rej)=>{
+    const img=new Image(),u=URL.createObjectURL(file);
+    img.onload=()=>{
+      const s=Math.min(1,max/Math.max(img.width,img.height)),w=Math.round(img.width*s),h=Math.round(img.height*s);
+      const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);
+      URL.revokeObjectURL(u);res(c.toDataURL('image/jpeg',q));
+    };
+    img.onerror=()=>{URL.revokeObjectURL(u);rej(new Error('No se pudo leer la imagen'))};
+    img.src=u;
+  });
+}
+/* Abre la cámara (o selector) y entrega la imagen comprimida. Debe llamarse dentro de un toque del usuario. */
+function pickPhoto(cb,opts){
+  const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.style.display='none';
+  if(!(opts&&opts.gallery))inp.setAttribute('capture','environment');
+  inp.onchange=async()=>{
+    const f=inp.files[0];inp.remove();if(!f)return;
+    try{await cb(await compress(f,1280,.72))}catch(e){toast(e.message)}
+  };
+  document.body.appendChild(inp);inp.click();
+}
+
+/* ---------- Lista ---------- */
+function visible(){
+  const q=norm($('#q').value),fe=$('#ffer').value,es=$('#fest').value;
+  return items.filter(p=>{
+    if(fe&&p.feria!==fe)return false;
+    if(es&&p.estado!==es)return false;
+    if(!q)return true;
+    const txt=[p.proveedor,p.pais,p.puerto,p.contacto,p.obs,p.stand,p.feria,...p.regs.map(r=>r.nombre+' '+r.nota+' '+Object.values(r.d).join(' '))].join(' ');
+    return norm(txt).includes(q);
+  }).sort((a,b)=>b.mod-a.mod);
+}
+function fillFilters(){
+  const ferias=[...new Set(items.map(p=>p.feria).filter(Boolean))].sort();
+  const f=$('#ffer'),prev=f.value;
+  f.innerHTML='<option value="">Todas las ferias</option>'+ferias.map(x=>`<option>${esc(x)}</option>`).join('');
+  f.value=ferias.includes(prev)?prev:'';
+  $('#dlFerias').innerHTML=ferias.map(x=>`<option value="${esc(x)}">`).join('');
+  const e=$('#fest'),pe=e.value;
+  e.innerHTML='<option value="">Todos los estados</option>'+STATES.map(x=>`<option>${x}</option>`).join('');
+  e.value=pe;
+}
+function renderList(){
+  fillFilters();
+  $('#tabB').textContent='Bandeja'+(caps.length?' ('+caps.length+')':'');
+  $('#tabP').className=tab==='p'?'on':'';$('#tabB').className=tab==='b'?'on':'';
+  $('#tools').hidden=tab!=='p';$('#list').hidden=tab!=='p';$('#bandeja').hidden=tab!=='b';
+  if(tab==='b'){renderBandeja();return}
+  const v=visible();
+  $('#count').textContent=v.length+(v.length===1?' proveedor':' proveedores')+(items.length!==v.length?' (de '+items.length+')':'');
+  $('#list').innerHTML=v.length?v.map(p=>{
+    const n=p.regs.length,pend=p.regs.filter(r=>!r.listo).length;
+    const th=p.fotos[0]?`style="background-image:url('${p.fotos[0]}')"`:'';
+    return `<div class="item" data-id="${p.id}"><div class="thumb" ${th}>${p.fotos[0]?'':'🏭'}</div><div class="b">
+      <div class="t">${esc(p.proveedor||'(sin nombre)')}</div>
+      <div class="s">${esc([p.pais,RUBRO[p.rubro]].filter(Boolean).join(' · '))}${p.feria?' — '+esc(p.feria):''}</div>
+      <div class="tags"><span class="star">${'★'.repeat(p.interes)}${'☆'.repeat(3-p.interes)}</span>${n?`<span class="tag">${n} registro${n>1?'s':''}</span>`:''}${pend?`<span class="tag warn">⏳ ${pend} por completar</span>`:''}${p.catalogo?'<span class="tag ok">Catálogo</span>':''}${p.enviara?'<span class="tag ok">Enviará muestra</span>':''}</div>
+    </div></div>`}).join(''):'<p class="empty">Sin proveedores aún.<br>Toca “+ Proveedor”, o “📷 Foto rápida” si no hay tiempo.</p>';
+}
+function renderBandeja(){
+  $('#count').textContent=caps.length?caps.length+' captura'+(caps.length>1?'s':'')+' por procesar':'';
+  $('#bandeja').innerHTML=caps.length?caps.slice().sort((a,b)=>b.ts-a.ts).map(c=>`<div class="cap" data-cid="${c.id}">
+    <div class="top"><img src="${c.fotos[0]}"><textarea data-cn="${c.id}" placeholder="Nota…">${esc(c.nota)}</textarea></div>
+    <div class="meta">${fmtTs(c.ts)}${c.feria?' · '+esc(c.feria):''}</div>
+    <div class="btns"><button class="btn pri" data-assign="${c.id}">Asignar a proveedor</button><button class="btn bad" data-capdel="${c.id}">Eliminar</button></div>
+  </div>`).join(''):'<p class="empty">Bandeja vacía.<br>Aquí caen las fotos rápidas para ordenarlas después en el hotel.</p>';
+}
+async function load(){
+  const all=await dbAll();
+  caps=all.filter(x=>x._t==='cap');
+  items=all.filter(x=>x._t!=='cap').map(normalize);
+  renderList();
+}
+$('#tabP').onclick=()=>{tab='p';renderList()};
+$('#tabB').onclick=()=>{tab='b';renderList()};
+
+/* ---------- Navegación ---------- */
+function showList(){cur=null;$('#formView').hidden=true;$('#listView').hidden=false;renderList()}
+function openForm(rec){cur=rec;fillForm();$('#listView').hidden=true;$('#formView').hidden=false;try{history.pushState({f:1},'')}catch(e){}scrollTo(0,0)}
+async function flush(){clearTimeout(saveT);if(cur)await persist()}
+async function closeForm(){if(history.state&&history.state.f)history.back();else{await flush();showList()}}
+window.addEventListener('popstate',async()=>{if(!$('#formView').hidden){await flush();showList()}});
+
+/* ---------- Formulario proveedor ---------- */
+function fillForm(){
+  $$('#form [data-k]').forEach(el=>{
+    const v=cur[el.dataset.k];
+    if(el.type==='checkbox')el.checked=!!v;
+    else if(el.type==='radio')el.checked=(el.value===cur.rubro);
+    else el.value=v==null?'':v;
+  });
+  $('#ftitle').textContent=cur.proveedor||'Nuevo proveedor';
+  $('#saved').textContent='';
+  renderFotos();renderStars();renderRegs();
+}
+function touch(){cur.mod=Date.now();$('#saved').textContent='…';clearTimeout(saveT);saveT=setTimeout(persist,350)}
+async function persist(){
+  if(!cur||isEmpty(cur))return;
+  try{
+    await dbPut(cur);
+    const i=items.findIndex(x=>x.id===cur.id);if(i>=0)items[i]=cur;else items.push(cur);
+    $('#saved').textContent='Guardado ✓';
+  }catch(e){$('#saved').textContent='⚠ Error al guardar';toast('Error al guardar: '+e.message)}
+}
+const reg=id=>cur.regs.find(r=>r.id===id);
+function updSummary(r){
+  const s=$(`details[data-rid="${r.id}"] summary`);if(!s)return;
+  s.querySelector('b').textContent=r.nombre||(r.nota?r.nota.slice(0,40):'')||'Registro sin nombre';
+  const sm=s.querySelector('small');sm.textContent=r.listo?'✔ completo':'⏳ por completar';sm.className=r.listo?'ok':'';
+}
+$('#form').addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.k){
+    if(t.type==='checkbox')cur[t.dataset.k]=t.checked;
+    else if(t.type==='radio'){if(t.checked){cur.rubro=t.value;ls('rubro',t.value);renderRegs()}}
+    else cur[t.dataset.k]=t.value;
+    if(t.dataset.k==='proveedor')$('#ftitle').textContent=t.value||'Nuevo proveedor';
+    if(t.dataset.k==='feria')ls('feria',t.value);
+    if(t.dataset.k==='moneda')renderRegs();
+    touch();
+  }else if(t.dataset.r){
+    const r=reg(t.dataset.r);if(!r)return;
+    if(t.dataset.f==='listo')r.listo=t.checked;
+    else if(t.dataset.f)r[t.dataset.f]=t.value;
+    else if(t.dataset.d)r.d[t.dataset.d]=t.value;
+    updSummary(r);touch();
+  }
+});
+$('#regs').addEventListener('toggle',e=>{const id=e.target.dataset&&e.target.dataset.rid;if(!id)return;e.target.open?OPEN.add(id):OPEN.delete(id)},true);
+
+function renderStars(){
+  $('#stars').innerHTML='<span class="hint">Interés&nbsp;</span>'+[1,2,3].map(n=>`<button data-star="${n}" class="${cur.interes>=n?'on':''}">★</button>`).join('');
+}
+function renderFotos(){
+  $('#fotos').innerHTML=cur.fotos.map((f,i)=>`<div class="ph1" style="background-image:url('${f}')"><button data-fdel="${i}">✕</button></div>`).join('')||'<span class="hint">Sin fotos todavía.</span>';
+}
+function regHTML(r,i){
+  const F=FIELDS[cur.rubro]||FIELDS.otro,th=r.fotos[0]||r.muestras[0];
+  const ph=[...r.fotos.map((f,k)=>[f,'fotos',k]),...r.muestras.map((f,k)=>[f,'muestras',k])]
+    .map(([f,kd,k])=>`<div class="ph1" style="background-image:url('${f}')">${kd==='muestras'?'<em>Muestra</em>':''}<button data-ract="fdel" data-rid="${r.id}" data-kind="${kd}" data-idx="${k}">✕</button></div>`).join('');
+  const det=F.map(k=>k==='esp'
+    ?`<label class="f full">${LBL[k]}<textarea data-r="${r.id}" data-d="${k}">${esc(r.d[k])}</textarea></label>`
+    :`<label class="f">${LBL[k]}<input data-r="${r.id}" data-d="${k}" value="${esc(r.d[k])}"></label>`).join('');
+  return `<details class="reg" data-rid="${r.id}" ${OPEN.has(r.id)?'open':''}>
+   <summary><div class="rth" ${th?`style="background-image:url('${th}')"`:''}>${th?'':'📷'}</div>
+    <div class="rt"><b>${esc(r.nombre||(r.nota?r.nota.slice(0,40):'')||'Registro sin nombre')}</b><small class="${r.listo?'ok':''}">${r.listo?'✔ completo':'⏳ por completar'}</small></div></summary>
+   <div class="rbody">
+    <div class="photos">${ph||'<span class="hint">Sin fotos</span>'}</div>
+    <div class="btns" style="margin-bottom:8px">
+     <button class="btn pri" data-ract="foto" data-rid="${r.id}" data-kind="fotos">📷 Colección</button>
+     <button class="btn" data-ract="foto" data-rid="${r.id}" data-kind="muestras">📷 Muestra</button>
+    </div>
+    <label class="f">Colección / producto<input data-r="${r.id}" data-f="nombre" value="${esc(r.nombre)}"></label>
+    <label class="f">Nota (texto libre)<textarea data-r="${r.id}" data-f="nota" placeholder="Lo que veas, precio, ideas…">${esc(r.nota)}</textarea></label>
+    <label class="f">Precio (${esc(cur.moneda||'')})<input data-r="${r.id}" data-f="precio" value="${esc(r.precio)}" placeholder="ej: 3,20 / m²"></label>
+    <details class="mas"><summary>Más detalles (${RUBRO[cur.rubro]||'Otro'})</summary><div class="g2" style="margin-top:8px">${det}</div></details>
+    <div class="rfoot"><label class="chip"><input type="checkbox" data-r="${r.id}" data-f="listo" ${r.listo?'checked':''}><span>Completo</span></label><span style="flex:1"></span><button class="x" data-ract="del" data-rid="${r.id}">Quitar</button></div>
+   </div></details>`;
+}
+function renderRegs(){
+  $('#regs').innerHTML=cur.regs.map((r,i)=>regHTML(r,i)).join('')||'<p class="hint">Sin registros. Agrega una colección o producto, o usa “⚡ Foto rápida”.</p>';
+}
+function addReg(quick){
+  const r=newReg();cur.regs.push(r);OPEN.add(r.id);touch();renderRegs();
+  const el=$(`details[data-rid="${r.id}"]`);if(el)el.scrollIntoView({block:'start'});
+  if(quick)fotoReg(r.id,'fotos',true);
+}
+function fotoReg(rid,kind,focusNota){
+  pickPhoto(async img=>{
+    const r=reg(rid);if(!r)return;
+    r[kind].push(img);OPEN.add(rid);touch();renderRegs();
+    if(focusNota){const t=$(`details[data-rid="${rid}"] textarea[data-f="nota"]`);if(t)t.focus()}
+  });
+}
+async function addFotos(files){
+  try{for(const f of files)cur.fotos.push(await compress(f,1280,.72));touch();renderFotos()}catch(e){toast(e.message)}
+}
+$('#fcam').onchange=async e=>{await addFotos(e.target.files);e.target.value=''};
+$('#fgal').onchange=async e=>{await addFotos(e.target.files);e.target.value=''};
+
+$('#form').addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const d=b.dataset;
+  if(d.act==='cam')$('#fcam').click();
+  else if(d.act==='gal')$('#fgal').click();
+  else if(d.act==='addreg')addReg(false);
+  else if(d.act==='quickreg')addReg(true);
+  else if(d.ract==='foto')fotoReg(d.rid,d.kind,false);
+  else if(d.ract==='fdel'){const r=reg(d.rid);r[d.kind].splice(+d.idx,1);touch();renderRegs()}
+  else if(d.ract==='del'){const r=reg(d.rid);if(regVacio(r)||confirm('¿Quitar este registro?')){cur.regs=cur.regs.filter(x=>x.id!==d.rid);touch();renderRegs()}}
+  else if(d.fdel!==undefined){cur.fotos.splice(+d.fdel,1);touch();renderFotos()}
+  else if(d.star){const n=+d.star;cur.interes=cur.interes===n?n-1:n;touch();renderStars()}
+  else if(d.act==='printOne'){await flush();imprimir([cur])}
+  else if(d.act==='delete'){
+    if(confirm('¿Eliminar este proveedor y todas sus fotos? No se puede deshacer.')){
+      const id=cur.id;clearTimeout(saveT);cur=null;await dbDel(id);items=items.filter(x=>x.id!==id);toast('Eliminado');
+      if(history.state&&history.state.f)history.back();else showList();
+    }
+  }
+});
+$('#btnBack').onclick=closeForm;
+
+/* ---------- Eventos de la lista / bandeja ---------- */
+$('#list').addEventListener('click',e=>{const it=e.target.closest('.item');if(!it)return;const r=items.find(p=>p.id===it.dataset.id);if(r)openForm(r)});
+$('#bNew').onclick=()=>openForm(newRec());
+$('#bQuick').onclick=quickCamera;
+['q','ffer','fest'].forEach(id=>$('#'+id).addEventListener('input',renderList));
+$('#feriaActual').value=ls('feria');
+$('#feriaActual').addEventListener('input',e=>ls('feria',e.target.value));
+
+let capT=null;
+$('#bandeja').addEventListener('input',e=>{
+  const id=e.target.dataset.cn;if(!id)return;const c=caps.find(x=>x.id===id);if(!c)return;
+  c.nota=e.target.value;c.mod=Date.now();clearTimeout(capT);capT=setTimeout(()=>dbPut(c),400);
+});
+$('#bandeja').addEventListener('click',async e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.assign){clearTimeout(capT);openAssign(b.dataset.assign)}
+  else if(b.dataset.capdel&&confirm('¿Eliminar esta captura?')){
+    await dbDel(b.dataset.capdel);caps=caps.filter(x=>x.id!==b.dataset.capdel);renderList();
+  }
+});
+
+/* ---------- Foto rápida -> bandeja ---------- */
+function quickCamera(){pickPhoto(img=>openQuick(img))}
+function openQuick(img){
+  showModal(`<h3>Nota rápida</h3><img class="pv" src="${img}"><label class="f">Nota (opcional)<textarea id="qn" placeholder="Qué es, precio, algo que recordar…"></textarea></label>
+   <div class="btns"><button class="btn" id="qc">Descartar</button><button class="btn" id="q2">Guardar + otra</button><button class="btn pri" id="q1">Guardar</button></div>`);
+  setTimeout(()=>{const t=$('#qn');if(t)t.focus()},120);
+  const save=()=>{
+    const c={id:uid(),_t:'cap',feria:ls('feria'),fecha:hoy(),ts:Date.now(),fotos:[img],nota:$('#qn').value.trim(),mod:Date.now()};
+    caps.push(c);hideModal();renderList();toast('Guardado en la bandeja');
+    return dbPut(c).catch(err=>toast('Error al guardar: '+err.message));
+  };
+  $('#qc').onclick=hideModal;
+  $('#q1').onclick=save;
+  $('#q2').onclick=()=>{const p=save();quickCamera();return p};
+}
+function openAssign(cid){
+  const c=caps.find(x=>x.id===cid);if(!c)return;
+  const sorted=items.slice().sort((a,b)=>b.mod-a.mod);
+  showModal(`<h3>Asignar captura</h3><img class="pv" src="${c.fotos[0]}">
+   <label class="f">Proveedor<select id="asel"><option value="new">➕ Proveedor nuevo (la foto será el stand)</option>${sorted.map(p=>`<option value="${p.id}">${esc(p.proveedor||'(sin nombre)')}${p.pais?' — '+esc(p.pais):''}</option>`).join('')}</select></label>
+   <p class="hint">En un proveedor existente se agrega como un registro nuevo (foto + nota).</p>
+   <div class="btns"><button class="btn" id="mc">Cancelar</button><button class="btn pri" id="mo">Asignar</button></div>`);
+  if(sorted.length)$('#asel').value=sorted[0].id;
+  $('#mc').onclick=hideModal;
+  $('#mo').onclick=async()=>{
+    const t=$('#asel').value;let p;
+    if(t==='new'){p=newRec();p.feria=c.feria||p.feria;p.fecha=c.fecha||p.fecha;p.fotos=[...c.fotos];p.obs=c.nota;items.push(p)}
+    else{p=items.find(x=>x.id===t);const r=newReg();r.fotos=[...c.fotos];r.nota=c.nota;p.regs.push(r);p.mod=Date.now()}
+    await dbPut(p);await dbDel(c.id);caps=caps.filter(x=>x.id!==c.id);hideModal();
+    if(t==='new'){openForm(p)}else{toast('Asignado');renderList()}
+  };
+}
+
+/* ---------- Menú / exportación ---------- */
+$('#btnMenu').onclick=e=>{e.stopPropagation();$('#menu').hidden=!$('#menu').hidden};
+document.addEventListener('click',()=>{$('#menu').hidden=true});
+$('#menu').addEventListener('click',e=>{
+  const m=e.target.closest('button');if(!m)return;
+  const a=m.dataset.m;
+  if(a==='csv')exportCSV(visible());
+  else if(a==='zip')exportZIP();
+  else if(a==='json')exportJSON();
+  else if(a==='import')$('#fimp').click();
+  else if(a==='print')imprimir(visible());
+});
+$('#fimp').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{
+    const d=JSON.parse(await f.text()),arr=Array.isArray(d)?d:[...(d.items||[]),...(d.caps||[])];let n=0;
+    const known=[...items,...caps];
+    for(const r of arr){const ex=known.find(i=>i.id===r.id);if(!ex||(r.mod||0)>(ex.mod||0)){await dbPut(r);n++}}
+    await load();toast(n+' registro(s) importados');
+  }catch(err){toast('Respaldo inválido: '+err.message)}
+};
+async function saveFile(name,blob,type){
+  const f=new File([blob],name,{type});
+  if(/Android|iPhone|iPad/i.test(navigator.userAgent)&&navigator.canShare&&navigator.canShare({files:[f]})){
+    try{await navigator.share({files:[f],title:name});return}catch(e){if(e.name==='AbortError')return}
+  }
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);
+}
+const stamp=()=>hoy().split('-').reverse().join('-');
+function exportJSON(){
+  saveFile('respaldo-ferias '+stamp()+'.json',new Blob([JSON.stringify({version:2,exportado:new Date().toISOString(),items,caps})],{type:'application/json'}),'application/json');
+}
+function exportCSV(list){
+  if(!list.length&&!caps.length){toast('No hay nada que exportar');return}
+  const H=['Feria','Fecha','Proveedor','País','Rubro','Puerto','Plazo de pago','Tiempo de producción','Catálogo','Muestra','Enviará muestra','Incoterm','Moneda','MOQ','Contacto','Cargo','Email','Teléfono','WeChat/WhatsApp','Web','Stand','Interés (1-3)','Estado','Notas proveedor','Colección / Producto','Precio',...Object.values(LBL),'Nota registro','Registro completo','N° fotos'];
+  const KEYS=Object.keys(LBL),rows=[H],yn=v=>v?'Sí':'No';
+  list.forEach(p=>{
+    const base=[p.feria,fmtFecha(p.fecha),p.proveedor,p.pais,RUBRO[p.rubro]||'',p.puerto,p.plazo,p.produccion,yn(p.catalogo),yn(p.muestra),yn(p.enviara),p.incoterm,p.moneda,p.moq,p.contacto,p.cargo,p.email,p.tel,p.wechat,p.web,p.stand,p.interes||'',p.estado,p.obs];
+    (p.regs.length?p.regs:[null]).forEach(r=>rows.push(r?[...base,r.nombre,r.precio,...KEYS.map(k=>r.d[k]||''),r.nota,yn(r.listo),r.fotos.length+r.muestras.length]:[...base,'','',...KEYS.map(()=>''),'','',p.fotos.length]));
+  });
+  caps.slice().sort((a,b)=>a.ts-b.ts).forEach(c=>{
+    const base=[c.feria,fmtFecha(c.fecha),'(Bandeja: sin asignar)',...Array(21).fill('')];
+    rows.push([...base,'','',...KEYS.map(()=>''),c.nota,'No',c.fotos.length]);
+  });
+  const txt='﻿'+rows.map(r=>r.map(c=>{c=String(c==null?'':c).replace(/\r?\n/g,' ');return /[;"]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(';')).join('\r\n');
+  saveFile('proveedores-ferias '+stamp()+'.csv',new Blob([txt],{type:'text/csv;charset=utf-8'}),'text/csv');
+}
+
+/* ZIP sin compresión (las fotos ya son JPEG) */
+const CT=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CT[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+function dataToU8(d){const b=atob(d.split(',')[1]),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+function makeZip(files){
+  const enc=new TextEncoder(),parts=[],cd=[];let off=0,cds=0;
+  for(const f of files){
+    const nm=enc.encode(f.name),crc=crc32(f.data),sz=f.data.length;
+    const lh=new DataView(new ArrayBuffer(30));
+    lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(8,0,true);lh.setUint16(10,0,true);lh.setUint16(12,0x21,true);
+    lh.setUint32(14,crc,true);lh.setUint32(18,sz,true);lh.setUint32(22,sz,true);lh.setUint16(26,nm.length,true);lh.setUint16(28,0,true);
+    parts.push(lh.buffer,nm,f.data);
+    const ch=new DataView(new ArrayBuffer(46));
+    ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(10,0,true);ch.setUint16(12,0,true);ch.setUint16(14,0x21,true);
+    ch.setUint32(16,crc,true);ch.setUint32(20,sz,true);ch.setUint32(24,sz,true);ch.setUint16(28,nm.length,true);ch.setUint32(42,off,true);
+    cd.push(ch.buffer,nm);cds+=46+nm.length;off+=30+nm.length+sz;
+  }
+  const end=new DataView(new ArrayBuffer(22));
+  end.setUint32(0,0x06054b50,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);end.setUint32(12,cds,true);end.setUint32(16,off,true);
+  return new Blob([...parts,...cd,end.buffer],{type:'application/zip'});
+}
+function exportZIP(){
+  const files=[],used=new Set();
+  const san=s=>String(s||'').replace(/[\\/:*?"<>|\r\n]+/g,'-').trim().slice(0,40);
+  const add=(path,img)=>{let n=path,i=2;while(used.has(n)){n=path.replace(/\.jpg$/,' ('+i+').jpg');i++}used.add(n);files.push({name:n,data:dataToU8(img)})};
+  visible().forEach((p,pi)=>{
+    const dir=p2(pi+1)+' '+(san(p.proveedor)||'Sin nombre')+'/';
+    p.fotos.forEach((f,k)=>add(dir+'00 stand-tarjeta '+(k+1)+'.jpg',f));
+    p.regs.forEach((r,ri)=>{
+      const base=dir+p2(ri+1)+' '+(san(r.nombre||r.nota)||'registro');
+      r.fotos.forEach((f,k)=>add(base+' - coleccion '+(k+1)+'.jpg',f));
+      r.muestras.forEach((f,k)=>add(base+' - muestra '+(k+1)+'.jpg',f));
+    });
+  });
+  caps.slice().sort((a,b)=>a.ts-b.ts).forEach(c=>{const d=new Date(c.ts);add('_Bandeja/'+d.getFullYear()+p2(d.getMonth()+1)+p2(d.getDate())+'-'+p2(d.getHours())+p2(d.getMinutes())+p2(d.getSeconds())+' '+san(c.nota)+'.jpg',c.fotos[0])});
+  if(!files.length){toast('No hay fotos para exportar');return}
+  saveFile('fotos-ferias '+stamp()+'.zip',makeZip(files),'application/zip');
+}
+
+/* ---------- Impresión: mismo formato de la hoja física ---------- */
+function ficha(p){
+  const rows=p.regs.filter(r=>!regVacio(r)).map(r=>{
+    const lab=k=>r.d[k]?LBL[k]+': '+r.d[k]:'';
+    return {desc:r.nombre||r.nota,precio:r.precio,medidas:r.d.medidas,comp:r.d.material,esp:['nudos','textura','hilos','colores','esp'].map(lab).filter(Boolean).concat(r.nombre&&r.nota?[r.nota]:[]).join(' · ')};
+  });
+  while(rows.length<12)rows.push({});
+  const box=v=>v?'☒':'☐';
+  const contacto=[p.contacto,p.cargo,p.email,p.tel,p.wechat,p.web].filter(Boolean).join(' · ');
+  return `<section class="ficha"><div class="fh">
+   <div class="fbox">${p.fotos[0]?`<img src="${p.fotos[0]}">`:''}</div>
+   <div class="ff">
+    <div><span>PROVEEDOR</span><i>${esc(p.proveedor)}</i></div>
+    <div><span>PAÍS</span><i>${esc(p.pais)}</i></div>
+    <div><span>PUERTO</span><i>${esc(p.puerto)}</i></div>
+    <div><span>PLAZO DE PAGO</span><i>${esc(p.plazo)}</i></div>
+    <div><span>TIEMPO DE PRODUCCIÓN</span><i>${esc(p.produccion)}</i></div>
+    <div class="chk"><span>CATÁLOGO ${box(p.catalogo)}</span><span>MUESTRA ${box(p.muestra)}</span><span>ENVIARÁ MUESTRA ${box(p.enviara)}</span></div>
+    ${contacto?`<div style="border:0;font-size:9pt"><span>Contacto:</span>${esc(contacto)}</div>`:''}
+   </div>
+   <div class="fm">${esc(p.feria)}<br>${fmtFecha(p.fecha)}<br>${'★'.repeat(p.interes)}<br>${esc([p.incoterm,p.moneda,p.moq&&('MOQ '+p.moq)].filter(Boolean).join(' · '))}</div>
+  </div>
+  <table><thead><tr><th style="width:27%">PRODUCTO / DESCRIPCIÓN</th><th style="width:9%">PRECIO</th><th style="width:11%">MEDIDAS</th><th style="width:17%">COMPOSICIÓN</th><th>ESPECIFICACIONES</th></tr></thead><tbody>
+  ${rows.map(x=>`<tr><td>${esc(x.desc)}</td><td>${esc(x.precio)}</td><td>${esc(x.medidas)}</td><td>${esc(x.comp)}</td><td>${esc(x.esp)}</td></tr>`).join('')}
+  </tbody></table>
+  <div class="obs">Obs ${esc(p.obs)}</div></section>`;
+}
+function imprimir(list){
+  if(!list.length){toast('No hay fichas para imprimir');return}
+  $('#print').innerHTML=list.map(ficha).join('');
+  setTimeout(()=>window.print(),150);
+}
+
+/* ---------- Init ---------- */
+$('#selEstado').innerHTML=STATES.map(x=>`<option>${x}</option>`).join('');
+$('#selInco').innerHTML=INCO.map(x=>`<option value="${x}">${x||'—'}</option>`).join('');
+$('#selMon').innerHTML=MON.map(x=>`<option>${x}</option>`).join('');
+openDB().then(load).catch(e=>{$('#list').innerHTML='<p class="empty">No se pudo abrir el almacenamiento local: '+esc(e.message)+'<br>Abre este archivo en Chrome o Safari (no en modo privado).</p>'});
+if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
+</script>
+</body>
+</html>
